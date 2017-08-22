@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "200593197418",
+    "firebase_url": "https://romanticdateideaathome.firebaseio.com",
+    "project_id": "romanticdateideaathome",
+    "storage_bucket": "romanticdateideaathome.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200593197418:android:78d5ceec7d388d7e",
+        "android_client_info": {
+          "package_name": "Romantic.Ideas.At.Home"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "200593197418-4fh2k6t1iq9urq3rjr2bthpcbu99f2iu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "Romantic.Ideas.At.Home",
+            "certificate_hash": "3577736191577d0eb560ae46f380465d8c76a670"
+          }
+        },
+        {
+          "client_id": "200593197418-1g4v0rdqm9kshg5musbk6jhfmiv6sqol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFu64HYRaLE0lZjWo1bWb8FweB7jYzDEU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "200593197418-1g4v0rdqm9kshg5musbk6jhfmiv6sqol.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200593197418:android:caaa4d0f974f0f54",
+        "android_client_info": {
+          "package_name": "romantic.ideas.at.home"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "200593197418-7fo43en0a31tgb3hqh3rorg9tasmfocq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "romantic.ideas.at.home",
+            "certificate_hash": "3577736191577d0eb560ae46f380465d8c76a670"
+          }
+        },
+        {
+          "client_id": "200593197418-1g4v0rdqm9kshg5musbk6jhfmiv6sqol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFu64HYRaLE0lZjWo1bWb8FweB7jYzDEU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "200593197418-1g4v0rdqm9kshg5musbk6jhfmiv6sqol.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

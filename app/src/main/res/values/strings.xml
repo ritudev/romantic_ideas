@@ -1,0 +1,12 @@
+<resources>
+    <string name="IDS_GOOGLE_MAPS_API_KEY">AIzaSyApnfE06B7atgA23g0ROxORoAJuk90DGC8</string>
+    <string name="app_name">Romantic Ideas at Home</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="ad_unit_id_banner">ca-app-pub-4312285284631830/2149934431</string>
+    <string name="mainPageAd_id_banner">ca-app-pub-4312285284631830/9857211678</string>
+    <string name="Description_Interstitial_ad_id">ca-app-pub-4312285284631830/3083742151</string>
+    <string name="Native_ad_ID_1">ca-app-pub-4312285284631830/9457578813</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+</resources>

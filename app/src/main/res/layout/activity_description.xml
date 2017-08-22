@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_description"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="smile.com.home.DescriptionActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/header_bg">
+
+        <include
+            layout="@layout/common_header"/>
+
+        <ImageView
+            android:id="@+id/shareImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:onClick="onClickShare"
+            android:padding="10dp"
+            android:src="@drawable/ic_action_share" />
+    </RelativeLayout>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/header_bg"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/ad_unit_id_banner" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/adView"
+        android:layout_below="@id/header">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/mainImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/image1" />
+
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mainImage"
+                android:layout_marginRight="70dp"
+                android:padding="10dp"
+                android:textColor="#B71C1C"
+                android:text="Title vsdkfsk fb"
+                android:textSize="25dp" />
+
+<ImageView
+    android:id="@+id/fav_icon"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_below="@id/mainImage"
+    android:layout_marginRight="15dp"
+    android:layout_alignParentRight="true"
+    android:src="@drawable/ic_empty_heart"
+    />
+
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_centerInParent="true"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:paddingBottom="20dp"
+                android:paddingTop="10dp"
+                android:text="Description fnkfnkdfb sdfn lsnfw fn,gernjkf  gerl nermf e"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_below="@id/description"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/shareMsgbtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/button_style"
+                    android:onClick="onClickShare"
+                    android:text="Share idea with other"
+                    android:textColor="@color/header_text" />
+
+                <Button
+                    android:id="@+id/shareApp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/button_style"
+                    android:onClick="onClickAppShare"
+                    android:text="Share our app"
+                    android:textColor="@color/header_text" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>
