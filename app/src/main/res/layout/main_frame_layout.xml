@@ -9,6 +9,18 @@
         android:id="@+id/tool_bar"
         layout="@layout/toolbar">
     </include>
+
+    <TextView
+        android:id="@+id/errorTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_below="@id/tool_bar"
+        android:padding="10dp"
+        android:text="Please check your internet connect and try again" />
+
     <ProgressBar
         android:id="@+id/wallet_progressBar"
         android:layout_width="wrap_content"
@@ -28,7 +40,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tool_bar"
+        android:layout_below="@id/errorTextView"
         android:layout_marginBottom="50dp"
         android:scrollbars="vertical" />
 

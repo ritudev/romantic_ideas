@@ -107,5 +107,6 @@
     <string-array name="drawer_list">
         <item>My Favourites</item>
         <item>Rate Us</item>
+        <item>Today idea</item>
         </string-array>
 </resources>

@@ -39,13 +39,16 @@ public class FavActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         ((TextView)findViewById(R.id.topbarheader)).setText("My Favourites");
+    }
+
+    @Override
+    protected void onStart() {
         if (FavouriteUtil.getInstance().getFavouriteList() == null || FavouriteUtil.getInstance().getFavouriteList().isEmpty()){
             findViewById(R.id.no_fav_TV).setVisibility(View.VISIBLE);
-    }else {
+        }else {
             SolventRecyclerViewAdapter rcAdapter = new SolventRecyclerViewAdapter(this, FavouriteUtil.getInstance().getFavouriteList());
             recyclerView.setAdapter(rcAdapter);
         }
-
-
+        super.onStart();
     }
 }

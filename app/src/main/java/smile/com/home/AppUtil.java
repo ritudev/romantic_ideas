@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
@@ -17,9 +18,16 @@ import android.widget.ImageView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
+
+import smile.com.home.model.Data;
+import smile.com.home.utils.SharedPrefUtils;
 
 /**
  * Created by   05 on 26-07-2017.
@@ -242,7 +250,6 @@ public class AppUtil {
 
 */
 
-
     public static String getRandomImageForList(ArrayList<String> imageList){
         int size = imageList.size()-1;
         Random rand = new Random();
@@ -252,7 +259,7 @@ public class AppUtil {
     }
 
     // range is 0-range
-    public static int getRandomNumberForList(int range){
+    public static int getRandomNumberInRange(int range){
         Random rand = new Random();
         return rand.nextInt(range) + 1; // n = the number of images, that start at idx 1
     }
@@ -273,6 +280,55 @@ public class AppUtil {
         Drawable drawable = ContextCompat.getDrawable(getContext(), drawableSrc).mutate();
         drawable.setColorFilter(ContextCompat.getColor(getContext(), color), PorterDuff.Mode.SRC_ATOP);
         return drawable;
+    }
+
+    public static long getTodayDate(){
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getTimeInMillis();
+    }
+
+    public static itemData getTodayIdea() {
+        long lastTimeString = SharedPrefUtils.getInstance().getLong("LAST_TIME", 0);
+        Calendar calendar = Calendar.getInstance();
+        long todayDate = calendar.getTimeInMillis();
+        final long ONE_DAY = 24 * 60 * 60 * 1000L;
+        if ((todayDate - lastTimeString) / ONE_DAY < 1) {
+            // return the same idea
+            String todayIdeaString = SharedPrefUtils.getInstance().getString("TODAY_IDEA");
+            List<itemData> itemDatas = jsonStringToListData(todayIdeaString);
+            if (itemDatas != null) {
+                return itemDatas.get(0);
+            }
+        }
+
+        // need to change
+        // select randomly and save in sharedpref
+        int range = Data.getInstance().getItemDatasList().size();
+        int position = AppUtil.getRandomNumberInRange(range);
+        itemData itemData = Data.getInstance().getItemData(position);
+        List<itemData> itemDatas = new ArrayList<>();
+        itemDatas.add(itemData);
+        SharedPrefUtils.getInstance().putString("TODAY_IDEA", listToJsonString(itemDatas));
+        SharedPrefUtils.getInstance().putLong("LAST_TIME", todayDate);
+        return itemData;
+    }
+
+    public static List<itemData> jsonStringToListData(String itemDataString) {
+        response response = getGson().fromJson(itemDataString, response.class);
+        return response.getItemData();
+    }
+
+
+    public static String listToJsonString(List<itemData> itemDatas) {
+        response response = new response();
+        response.setItemData(itemDatas);
+        return getGson().toJson(response);
+    }
+
+    @NonNull
+    private static Gson getGson() {
+        GsonBuilder mGsonBuilder = new GsonBuilder();
+        return mGsonBuilder.create();
     }
 
 }

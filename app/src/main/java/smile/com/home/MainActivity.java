@@ -9,18 +9,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
@@ -37,11 +38,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import smile.com.home.model.Data;
+import smile.com.home.utils.FavouriteUtil;
+
+import static smile.com.home.Constants.DESCRIPTION;
+import static smile.com.home.Constants.SELECTED_ITEM;
+import static smile.com.home.Constants.TITLE;
 
 
 public class MainActivity extends AppCompatActivity implements RatingDialog.RatingDialogFormListener, RatingDialog.RatingDialogListener {
@@ -66,8 +72,14 @@ public class MainActivity extends AppCompatActivity implements RatingDialog.Rati
         setContentView(R.layout.activity_main);
         mProgressBar = (ProgressBar) findViewById(R.id.wallet_progressBar);
         loader = (ImageView) findViewById(R.id.loader);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
         if (!AppUtil.isNetworkAvailable()) {
             showNetworkNotAvailableError();
+            showOfflineDataIfAny();
         } else {
             mProgressBar.setVisibility(View.VISIBLE);
             loader.setVisibility(View.GONE);
@@ -75,15 +87,10 @@ public class MainActivity extends AppCompatActivity implements RatingDialog.Rati
         mAdView = (AdView) findViewById(R.id.adView);
         mAdBuilder = new AdBuilder(mAdView);
         mAdBuilder.showBannerAds();
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-
-        linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
         initDrawer();
 
         createRequest();
+        FavouriteUtil.getInstance().loadFavouriteFromSharedPref();
     }
 
     private void initDrawer() {
@@ -162,12 +169,19 @@ public class MainActivity extends AppCompatActivity implements RatingDialog.Rati
                 .url("https://dixits-school-manual.firebaseapp.com/dateIdea.json")
                 .build();
 
+        client.setConnectTimeout(15, TimeUnit.SECONDS); // connect timeout
+        client.setReadTimeout(15, TimeUnit.SECONDS);    // socket timeout
         client.newCall(request).enqueue(new Callback() {
 
             @Override
             public void onFailure(Request request, IOException e) {
-                e.printStackTrace();
-                showNetworkNotAvailableError();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showNetworkNotAvailableError();
+                        showOfflineDataIfAny();
+                    }
+                });
             }
 
             @Override
@@ -185,21 +199,32 @@ public class MainActivity extends AppCompatActivity implements RatingDialog.Rati
                     onFailure(response.request(), null);
                     return;
                 }
-                runOnUiThread(new Runnable() {
+                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         mProgressBar.setVisibility(View.GONE);
                         loader.setVisibility(View.GONE);
-                        List<itemData> gaggeredList = GsonResponse.getItemData();
-                        Collections.shuffle(Arrays.asList(gaggeredList));
-                        SolventRecyclerViewAdapter rcAdapter = new SolventRecyclerViewAdapter(MainActivity.this, gaggeredList);
-                        recyclerView.setAdapter(rcAdapter);
-                        Data.getInstance().initDataFromResponse(gaggeredList);
+                        List<itemData> itemDataListFromResponse = GsonResponse.getItemData();
+                        Collections.shuffle(itemDataListFromResponse);
+                        updateAdapter(itemDataListFromResponse);
+                        Data.getInstance().initDataFromResponse(itemDataListFromResponse);
                     }
                 });
             }
         });
+    }
+
+    private void showOfflineDataIfAny() {
+        TextView view = (TextView)findViewById(R.id.errorTextView);
+        view.setText("Working Offline, Please check your internet connection to get new ideas");
+        updateAdapter(Data.getInstance().getItemDatasList());
+    }
+
+    private void updateAdapter(List<itemData> itemDataListFromResponse) {
+        if(itemDataListFromResponse != null && !itemDataListFromResponse.isEmpty()) {
+            SolventRecyclerViewAdapter rcAdapter = new SolventRecyclerViewAdapter(MainActivity.this, itemDataListFromResponse);
+            recyclerView.setAdapter(rcAdapter);
+        }
     }
 
     private class DrawerItemClickListener implements android.widget.AdapterView.OnItemClickListener {
@@ -219,6 +244,9 @@ public class MainActivity extends AppCompatActivity implements RatingDialog.Rati
             case 1:
                 initRatingDialog(RATING_THRESHOLD, 1);
                 break;
+            case 2:
+                openTodayIdea();
+                break;
             /*case 2:
                 AppUtils.getInstance().shareApp(this);
                 break;
@@ -230,6 +258,23 @@ public class MainActivity extends AppCompatActivity implements RatingDialog.Rati
             // Highlight the selected item, update the title, and close the drawer
             mDrawerList.setItemChecked(position, true);
             mDrawerLayout.closeDrawer(mDrawerList);
+        }
+    }
+
+    private void openTodayIdea() {
+        Intent intent = new Intent(this, DescriptionActivity.class);
+        if(Data.getInstance().getItemDatasList() == null || Data.getInstance().getItemDatasList().isEmpty()) {
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+            Toast.makeText(this,"Check your internet connection", Toast.LENGTH_LONG).show();
+        } else {
+            itemData itemData = AppUtil.getTodayIdea();
+            if (itemData.getDescription() != null) {
+                intent.putExtra(DESCRIPTION, itemData.getDescription());
+            }
+            intent.putExtra(TITLE, itemData.getItemText());
+            intent.putExtra(SELECTED_ITEM, itemData);
+            startActivity(intent);
+            AppUtil.getInstance().logInFabric("open_detail_page_today idea_", itemData.getItemText());
         }
     }
 
@@ -285,4 +330,9 @@ public class MainActivity extends AppCompatActivity implements RatingDialog.Rati
                 .putCustomAttribute("USER_FEEDBACK", feedback));
     }
 
+    @Override
+    public void finish() {
+        FavouriteUtil.getInstance().saveFavouriteInSharedPref();
+        super.finish();
+    }
 }

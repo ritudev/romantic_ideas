@@ -31,6 +31,11 @@ public class ToolBarItemAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.drawer_list_item, null);
 
+        if(position == 0){
+            view.findViewById(R.id.drawer_header).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.drawer_header).setOnClickListener(null);
+        }
+
         TextView textView = (TextView) view.findViewById(R.id.tv_toolbar_text);
         textView.setText(items.get(position));
         textView.setCompoundDrawablePadding(20);

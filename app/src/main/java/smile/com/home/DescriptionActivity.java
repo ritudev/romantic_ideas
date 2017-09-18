@@ -12,12 +12,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdView;
 
-import smile.com.home.model.Data;
 import smile.com.home.utils.FavouriteUtil;
 
 import static smile.com.home.Constants.DESCRIPTION;
 import static smile.com.home.Constants.SELECTED_ITEM;
-import static smile.com.home.Constants.SELECTED_POSITION;
 import static smile.com.home.Constants.TITLE;
 
 public class DescriptionActivity extends AppCompatActivity implements View.OnClickListener {
@@ -47,7 +45,7 @@ public class DescriptionActivity extends AppCompatActivity implements View.OnCli
         }
 
         ImageView imageView = (ImageView) findViewById(R.id.mainImage);
-        AppUtil.setImage(this, imageView, "image" + AppUtil.getRandomNumberForList(4));
+        AppUtil.setImage(this, imageView, "image" + AppUtil.getRandomNumberInRange(4));
         ((TextView) findViewById(R.id.description)).setText(Html.fromHtml(description.getDescription()));
 
         final Handler handler = new Handler();
